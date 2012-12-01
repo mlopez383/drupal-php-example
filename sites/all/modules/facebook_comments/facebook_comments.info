@@ -1,0 +1,5 @@
+name = Facebook Comments
+description = Add facebook comments to specific node types and handle comment counts with views.
+core = 7.x
+version = "7.x-1.0"
+files[] = facebook_comments.module
