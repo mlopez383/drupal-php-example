@@ -1,0 +1,7 @@
+name = Touristic Resources
+description = A touristic resource content type
+package = Web Portal for Touristic Social Communities
+core = 7.x
+files[] = touristic_resources.install
+files[] = touristic_resources.module
+scripts[] = touristic_resources.js

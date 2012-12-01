@@ -1,52 +1,59 @@
 <?php
 // $Id: page.tpl.php,v 1.17.2.4 2010/11/19 14:42:44 danprobo Exp $
 ?>
+
+<?php if($title=='Pagesssss'): ?>
+	<?php
+		module_load_include('php', 'plan_trip'); 
+	?>
+<?php else: ?>
 <div <?php print danland_page_class($page['sidebar_first'], $page['sidebar_second']); ?>>
-<div id="header">
-<div id="header-wrapper">
-	<?php if ($logo): ?> 
-		<div id="logo-wrapper">
-			<div class="logo">
-				<a href="<?php print $base_path ?>" title="<?php print t('Home') ?>"><img src="<?php print $logo ?>" alt="<?php print t('Home') ?>" /></a>
-			</div>
-		</div><!-- end logo wrapper -->
-	<?php endif; ?>
-	<?php if ($site_name || $site_slogan) : ?>
-		<div id="branding-wrapper">
-			<?php if ($site_name) : ?>
-				<?php if ($is_front) : ?>
-					<h1 class="site-name"><a href="<?php print $base_path ?>" title="<?php print $site_name ?>"><?php print $site_name ?></a></h1>
+	<div id="header">
+	<div id="header-wrapper">
+		<?php if ($logo): ?> 
+			<div id="logo-wrapper">
+				<div class="logo">
+					<a href="<?php print $base_path ?>" title="<?php print t('Home') ?>"><img src="<?php print $logo ?>" alt="<?php print t('Home') ?>" /></a>
+				</div>
+			</div><!-- end logo wrapper -->
+		<?php endif; ?>
+		<?php if ($site_name || $site_slogan) : ?>
+			<div id="branding-wrapper">
+				<?php if ($site_name) : ?>
+					<?php if ($is_front) : ?>
+						<h1 class="site-name"><a href="<?php print $base_path ?>" title="<?php print $site_name ?>"><?php print $site_name ?></a></h1>
+					<?php endif; ?>
+					<?php if (!$is_front) : ?>
+						<h2 class="site-name"><a href="<?php print $base_path ?>" title="<?php print $site_name ?>"><?php print $site_name ?></a></h2>
+					<?php endif; ?>
 				<?php endif; ?>
-				<?php if (!$is_front) : ?>
-					<h2 class="site-name"><a href="<?php print $base_path ?>" title="<?php print $site_name ?>"><?php print $site_name ?></a></h2>
+				<?php if ($site_slogan) : ?>
+					<div class='site-slogan'><?php print $site_slogan; ?></div>
 				<?php endif; ?>
-			<?php endif; ?>
-			<?php if ($site_slogan) : ?>
-				<div class='site-slogan'><?php print $site_slogan; ?></div>
-			<?php endif; ?>
-        	</div><!-- end branding wrapper -->
-	<?php endif; ?>
+	        	</div><!-- end branding wrapper -->
+		<?php endif; ?>
+		
+		<?php if ($page['search_box']): ?>
+			<div id="search-box">
+				<?php print render ($page['search_box']); ?>
+			</div><!-- /search-box -->
+		<?php endif; ?>
 	
-	<?php if ($page['search_box']): ?>
-		<div id="search-box">
-			<?php print render ($page['search_box']); ?>
-		</div><!-- /search-box -->
-	<?php endif; ?>
+		<?php if ($feed_icons): ?>
+			<div class="feed-wrapper">
+				<?php print $feed_icons; ?>
+			</div>
+		<?php endif; ?>
+	
+		<?php if (!$is_admin): ?>
+			<div id="authorize">
+	      		      <ul><?php global $user; if ($user->uid != 0) { print '<li class="first">' .t('Logged in as '). '<a href="' .url('user/'.$user->uid). '">' .$user->name. '</a></li>'; print '<li><a href="' .url('user/logout'). '">' .t('Logout'). '</a></li>'; } else { print '<li class="first"><a href="' .url('user'). '">' .t('Login'). '</a></li>'; print '<li><a href="' .url('user/register'). '">' .t('Register'). '</a></li>'; } ?></ul>
+			</div>
+		<?php endif; ?>
+	
+	      </div><!-- end header-wrapper -->
+	</div> <!-- /header -->
 
-	<?php if ($feed_icons): ?>
-		<div class="feed-wrapper">
-			<?php print $feed_icons; ?>
-		</div>
-	<?php endif; ?>
-
-	<?php if (!$is_admin): ?>
-		<div id="authorize">
-      		      <ul><?php global $user; if ($user->uid != 0) { print '<li class="first">' .t('Logged in as '). '<a href="' .url('user/'.$user->uid). '">' .$user->name. '</a></li>'; print '<li><a href="' .url('user/logout'). '">' .t('Logout'). '</a></li>'; } else { print '<li class="first"><a href="' .url('user'). '">' .t('Login'). '</a></li>'; print '<li><a href="' .url('user/register'). '">' .t('Register'). '</a></li>'; } ?></ul>
-		</div>
-	<?php endif; ?>
-
-      </div><!-- end header-wrapper -->
-</div> <!-- /header -->
 <div style="clear:both"></div>
 
 <div id="menu">
@@ -65,6 +72,7 @@
     <?php endif; ?>
 <div id="rounded-menu-right"></div>
 </div> <!-- end menu -->
+
 <div style="clear:both"></div>
 
 <?php if($is_front): ?>
@@ -80,9 +88,10 @@
 <?php if ($page['highlighted']) : ?><div id="slideshow-bottom">
 <div id="mission"><?php print render ($page['highlighted']); ?></div></div><?php endif; ?>
 <div class="slideshow">
-<img src="<?php print $base_path . $directory; ?>/images/slideshows/sea.jpg" width="950" height="355" alt="slideshow 1"/>
-<img src="<?php print $base_path . $directory; ?>/images/slideshows/noon.jpg" width="950" height="355" alt="slideshow 2"/>
-<img src="<?php print $base_path . $directory; ?>/images/slideshows/snow.jpg" width="950" height="355" alt="slideshow 3"/>
+<img src="<?php print $base_path . $directory; ?>/images/slideshows/ima2.jpg" width="950" height="355" alt="Santa Cruz"/>
+<img src="<?php print $base_path . $directory; ?>/images/slideshows/ima3.jpg" width="950" height="355" alt="La Paz"/>
+<img src="<?php print $base_path . $directory; ?>/images/slideshows/ima4.jpg" width="950" height="355" alt="Sucre"/>
+<img src="<?php print $base_path . $directory; ?>/images/slideshows/ima5.jpg" width="950" height="355" alt="Carnaval de Oruro"/>
 </div>
 </div>
 </div>
@@ -122,13 +131,15 @@
 			<a id="main-content"></a>
 			<?php if ($page['content_top']) : ?><div class="content-top"><?php print render ($page['content_top']); ?></div>
 			<?php endif; ?>
-			<?php if (!$is_front) print $breadcrumb; ?>
+			<?php //if (!$is_front) print $breadcrumb; ?>
 			<?php if ($show_messages) { print $messages; }; ?>
       		<?php print render($title_prefix); ?>
       			<?php if ($title): ?>
-        				<h1 class="title" id="page-title">
-         			 		<?php print $title; ?>
-        				</h1>
+        				<?php if (!strpos(request_uri(),'/trip/list')): ?>
+	        				<h1 class="title" id="page-title">
+	         			 		<?php print $title; ?>
+	        				</h1>
+        				<?php endif; ?>
      				 <?php endif; ?>
       		<?php print render($title_suffix); ?>
       		<?php if ($tabs): ?>
@@ -222,6 +233,11 @@
 <?php endif; ?>
 </div> <!-- end footer wrapper -->
 
+
 <div style="clear:both"></div>
-<div id="notice"><p>Theme by <a href="http://www.danetsoft.com">Danetsoft</a> and <a href="http://www.danpros.com">Danang Probo Sayekti</a> inspired by <a href="http://www.maksimer.no">Maksimer</a></p></div>
+<div id="notice"><p>Web Portal for Touristic Social Communities 2012</p></div>
+
 </div>
+
+<?php endif; ?>  <!-- end else of plan trip -->
+

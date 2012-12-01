@@ -1,0 +1,23 @@
+<?php
+
+function touristic_resources_install() {
+	node_types_rebuild();
+	$types = node_type_get_types();
+	node_add_body_field($types['touristic_resources']);
+}
+
+
+function touristic_resources_uninstall() {
+	$sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+	$result = db_query($sql, array(':type' => 'touristic_resources'));
+	$nids = array();
+	foreach ($result as $row) {
+		$nids[] = $row->nid;
+	}
+	// Delete all the nodes at once
+	node_delete_multiple($nids);
+	
+	_node_types_build(TRUE);
+	node_type_delete('touristic_resources');
+	field_purge_batch(1000);
+}
