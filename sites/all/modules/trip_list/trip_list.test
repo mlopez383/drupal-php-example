@@ -1,0 +1,41 @@
+<?php
+
+class PagerExampleTestCase extends DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Trip List',
+      'group' => 'Trip',
+    );
+  }
+
+  function setUp() {
+    // Enable the module.
+    parent::setUp('trip_list');
+  }
+
+  /**
+   * Verify the functionality of the example module.
+   */
+  function testPagerPage() {
+    // no need to login for this test
+    $this->drupalGet('trip_list');
+    $this->assertText('next', 'Found next link');
+    $this->assertText('last', 'Found last link');
+
+    // on the first page we shouldn't see the first
+    // or previous links
+    $this->assertNoText('first', 'No first link on the first page');
+    $this->assertNoText('previous', 'No previous link on the first page');
+
+    // lets go to the second page
+    $this->drupalGet('trip_list', array('query' => array('page' => 1)));
+    $this->assertText('next', 'Found next link');
+    $this->assertText('last', 'Found last link');
+
+    // on the second page we should also see the first
+    // and previous links
+    $this->assertText('first', 'Found first link');
+    $this->assertText('previous', 'Found previous link');
+  }
+}

@@ -1,0 +1,17 @@
+<?php
+
+function plan_trip_menu() {
+  $items['planning/%'] = array(
+    'title' => 'Pagesssss',
+    'description' => 'Show a page with a long list across multiple pages',
+    'page callback' => 'plan_trip_page',
+    'access callback' => TRUE,
+  	'page arguments' => array(1),
+  	'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function plan_trip_page() {
+  return array();
+}

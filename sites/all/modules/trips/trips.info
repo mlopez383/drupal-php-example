@@ -1,0 +1,8 @@
+name = Trips
+description = A trip content type
+package = Web Portal for Touristic Social Communities
+core = 7.x
+files[] = trips.install
+files[] = trips.module
+scripts[] = jquery.tokeninput.js
+stylesheets[all][] = token-input.css

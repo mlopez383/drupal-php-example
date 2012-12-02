@@ -1,0 +1,87 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function trip_list_menu() {
+  $items['trip/list'] = array(
+    'title' => 'Trip List',
+    'page callback' => 'drupal_get_form',
+	'page arguments' => array('trip_list_page'),
+    'access callback' => TRUE
+  );
+  return $items;
+}
+
+
+
+function trip_list_page($form, &$form_state) {
+  global $user;
+  /*drupal_set_message('<pre>'. check_plain(print_r($user, TRUE)) .'</pre>');*/
+	
+  $query = db_select('wptsc_trips', 't')->extend('PagerDefault');
+  $query->join('node', 'n', 'n.nid = t.trip_id');
+  /*$query->join('wptsc_trips_resources', 'tr', 'tr.trip_id = t.trip_id');*/
+
+  $query->fields('t', array('trip_id','name', 'inicio', 'fin'));
+  /*$query->fields('tr', array('resource_id'));*/
+  $query->condition('n.uid', $user->uid);
+	
+  
+  $result = $query
+    ->limit(6)         // this is where you change the number of rows
+    ->orderBy('t.inicio','DESC')
+    ->execute();
+  
+  $output='<h1 class="title" id="page-title">Trips</h1><br />';
+
+  if($result->rowCount()<1){
+  	$output.='You do not have trips';
+  }
+  
+  foreach ($result as $row) {
+  	
+  	$outpart1='';
+  	$outpartr='';
+  	$ryut = db_query('SELECT ri."name", x(p."location"), y(p."location") FROM wptsc_pois AS p, wptsc_trips_resources AS tr, wptsc_resource_infos AS ri WHERE p.resource_ptr_id = tr.resource_id AND ri.resource_id=p.resource_ptr_id AND tr.trip_id='.$row->trip_id);
+  	foreach ($ryut as $rw) {
+  		$outpart1.=('|'.$rw->x.','.$rw->y);
+  		$outpartr.=$rw->name.', ';
+  	}
+  	
+  	$output.='<img width="145" height="97" alt="'.$row->name.'" src="http://maps.google.com/maps/api/staticmap?size=300x200&maptype=terrain&sensor=false&markers=size:small';
+  	//$output.='|48.856918,2.341210|41.385719,2.170050';
+  	$output.=$outpart1;
+  	$output.='&path=color:0x0000ff|weight:5';
+  	//$output.='|41.385719,2.170050|48.856918,2.341210';
+  	$output.=$outpart1;
+  	$output.='" style="float:left">';
+  	$output.='<div style="float:left"><a href="'.url("node/$row->trip_id").'"><h3>&nbsp;'.$row->name.'</h3></a>';
+  	$output.='<span style="color:#505050">';
+  	if(date("Y",strtotime($row->inicio))==date("Y",strtotime($row->fin)))
+  		$output.='&nbsp;From '.date("F dS", strtotime($row->inicio));
+  	else
+  	  	$output.='&nbsp;From '.date("F dS, Y", strtotime($row->inicio));
+  	
+  	if(date("YF",strtotime($row->inicio))==date("YF",strtotime($row->fin)))
+  		$output.=' to '.date("dS, Y", strtotime($row->fin));
+  	else
+  	  	$output.=' to '.date("F dS, Y", strtotime($row->fin));
+  	$output.='</span><br />';
+  	
+  	$outpartr=substr($outpartr,0,-2);
+  	$output.='&nbsp;<strong>'.$outpartr.'</strong>';
+  	
+	/*$output.=$row->resource_id;*/
+	$output.='</div><div style="clear:both"></div><br />';
+  }
+
+  $form['contenido'] = array(
+    '#markup' => $output,
+  );
+
+  // attach the pager theme
+  $form['pager'] = array('#theme' => 'pager');
+  
+  return $form;
+}

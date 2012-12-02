@@ -1,0 +1,158 @@
+#contenedorwptsc {
+	width:100%;
+	margin: auto;
+}
+/* Estilo de los otros contenedores */
+#cabecerawptsc{
+	background: #cbcbcb;
+}
+
+#mapawptsc {
+	display: block;
+	float: right;
+}
+
+#menuizqwptsc {
+	position: absolute;
+	margin: 0px;
+	padding: 10px;
+	background: white;
+	border: 1px solid #BBB;
+	width: 260px;
+	left: 0px;
+	float: left;
+	top: 65px;
+	bottom: 0px;
+	visibility: visible;
+	display: block;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+#cabecerawptsc, #mapawptsc {
+	padding: 1.25em 2%;
+	margin: 0.4em 0;
+}
+
+#cabecerawptsc{ 
+	height: 20px;
+	margin-bottom: 0;
+}
+#contenidowptsc { 
+	padding: 0; 
+}
+
+#poisdraggablewptsc, #servidraggablewptsc { 
+	width: 180px; 
+}
+
+#poisdraggablewptsc{
+	display: block;
+}
+
+li.servitemdragablewp{
+	padding: 0;
+	z-index: 1;
+	background-color: menu;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #CCC;
+}
+
+li.poisitemdragablewp{
+	z-index: 1;
+	background-color: menu;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #CCC;
+}
+
+#poisdraggablewptsc:hover{
+	cursor: move;
+}
+
+#servidraggablewptsc:hover{
+	cursor: move;
+}
+
+.droppablewptsc { 
+	width: 100%; 
+	height: 20px; 
+	padding: 0.2em;  
+	background-color: menu;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #CCC;
+}
+
+.listsinbullet{
+	list-style-type: none;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 0;
+}
+
+
+span.titlewpft {
+	padding-left: 15px;
+	color: #333;
+	text-transform: uppercase;
+	font-weight: bold;
+	display: inline-block;
+	font-size: 0.9em;
+	font:13px/1.231 Arial,sans-serif;
+}
+
+h1.titledaywportal{
+	/*width:246px;*/
+	padding: 0.2em;
+	font-weight: bold;
+	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%,#DEDEDE), color-stop(100%,#CBCBCB));
+	background-image: -webkit-linear-gradient(#DEDEDE,#CBCBCB);
+	background-image: -moz-linear-gradient(#DEDEDE,#CBCBCB);
+	background-image: -o-linear-gradient(#DEDEDE,#CBCBCB);
+	background-image: -ms-linear-gradient(#DEDEDE,#CBCBCB);
+	background-image: linear-gradient(#DEDEDE,#CBCBCB);
+	filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFDEDEDE', endColorstr='#FFCBCBCB');
+	display: inline-block;
+	border-bottom: 1px solid #B1B1B1;
+	border-top: 1px solid #EDEDED;
+	width: 100%;
+	float: left;
+}
+
+div.citywpts{
+	background-color: menu;
+	width: 100%;
+	padding: 0.3em;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #CCC;
+	/*display: inline;*/
+	font-weight: bold;
+} 
+
+ul.placeswptsc{
+	list-style: none;
+	margin-left: 0px;
+	float: left;
+	width: 100%;
+	display: none;
+}
+
+a.elimwptsc{
+	float: right;
+}
+
+/*boton save*/
+.actionButton{
+	color: white !important;
+	text-decoration: none !important;
+	background: url('buttons.png') 0px 0px;
+	padding: 0.3em 1em 0.3em 1em;
+	border: 0;
+	cursor: pointer;
+	border-radius: 4px;
+	border-bottom: solid 1px 
+	#1D6068;
+	text-shadow: 0px 1px 0px 
+	rgba(0, 0, 0, 0.5);
+}
+
+/*ul meno izquierdo*/

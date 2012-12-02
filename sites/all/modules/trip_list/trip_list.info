@@ -1,0 +1,5 @@
+name = Trip List
+description = Shows a trip list
+package = Web Portal for Touristic Social Communities
+core = 7.x
+files[] = trip_list.test

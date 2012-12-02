@@ -1,0 +1,5 @@
+name = Plan Trip
+description = Associate Touristic Resources with Trips
+package = Web Portal for Touristic Social Communities
+core = 7.x
+

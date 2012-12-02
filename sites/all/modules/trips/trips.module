@@ -1,0 +1,265 @@
+<?php
+
+function trips_node_info() {
+	return array(
+		'trips' => array(
+			'name' => t('Trip'),
+			'base' => 'trips',
+			'description' => t('Use this content type to create a trip.'),
+			'has_title' => FALSE,
+			'title_label' => t('Trip Title'),
+		),
+	);
+}
+
+
+function trips_menu_alter(&$callbacks) {
+	if (!user_access('administer nodes')) {
+		$callbacks['node/add/trips']['access callback'] = 'user_access';
+		$callbacks['node/add/trips']['access arguments'] = array('administer nodes');
+	}
+}
+
+
+function trips_permission() {
+	return array(
+		'create trips' => array(
+			'title' => t('Create a trip'),
+			'description' => t('Create a trip'),
+		),
+		'edit own trips' => array(
+			'title' => t('Edit own trip'),
+			'description' => t('Edit your own trip'),
+		),
+		'edit any trips' => array(
+			'title' => t('Edit any trip'),
+			'description' => t('Edit any trip'),
+		),
+		'delete own trips' => array(
+			'title' => t('Delete own trip'),
+			'description' => t('Delete own trip'),
+		),
+		'delete any trips' => array(
+			'title' => t('Delete any trip'),
+			'description' => t('Delete any trip'),
+		),
+	);
+}
+
+
+function trips_node_access($node, $op, $account) {
+	if (! is_object($node)) {
+		return NODE_ACCESS_IGNORE;
+	}
+	
+	$is_author = $account->uid == $node->uid;
+	switch ($op) {
+		case 'create':
+			if (user_access('create trips', $account)) {
+				return NODE_ACCESS_ALLOW;
+			}
+		case 'update':
+			if (user_access('edit own trips', $account) && $is_author || user_access('edit any trips', $account)) {
+				return NODE_ACCESS_ALLOW;
+			}
+		case 'delete':
+			if (user_access('delete own trips', $account) && $is_author || user_access('delete any trips', $account)) {
+				return NODE_ACCESS_ALLOW;
+			}
+	}
+}
+
+
+
+function trips_form($node, &$form_state) {
+	$prepopulatev='';
+	if(!empty($node->title) && !empty($node->nid)){
+		
+		$query = db_select('wptsc_resource_infos', 'ri');
+		$query->join('wptsc_trips_resources', 'tr', 'ri.resource_id=tr.resource_id');
+		$query->join('wptsc_trips', 't', 'tr.trip_id=t.trip_id');
+		
+		$query
+			->condition('tr.category', 'C', '=')
+			->condition('t.trip_id', $node->nid, '=')
+			->fields('ri', array('resource_id','name'));
+		$resultw=$query->execute();
+		
+		foreach ($resultw as $row) {
+			$prepopulatev.='{"id":"'.$row->resource_id.'","name":"'.$row->name.'"},';
+		}
+		
+		if(strlen($prepopulatev)>0)
+			$prepopulatev=substr($prepopulatev, 0, -1);
+		$prepopulatev=', prePopulate: [ '.$prepopulatev.' ]';
+	}
+	
+	
+	$form = array();
+	
+	$form['t_name'] = array(
+			'#title' => t('Name'),
+			'#type' => 'textfield',
+			'#required' => TRUE,
+			'#default_value' => !empty($node->title) ? $node->title : '',
+	);
+	
+	$form['t_places'] = array(
+			'#type' => 'textfield',
+			'#title' => t('Places'),
+			'#name' => 'blah',
+	);
+	
+	$form['blinky2'] = array(
+			'#markup' => '
+            	<script type="text/javascript">
+					jQuery(document).ready(function(jQuery) {
+							jQuery("#edit-t-places").tokenInput("../../'.drupal_get_path('module', 'trips').'/autocomplete.php", {
+			                preventDuplicates: true'.$prepopulatev.'
+			            });
+					});
+				</script>
+			');
+	
+	$form['t_publico'] = array(
+			'#type' => 'checkbox',
+			'#title' => t('Only you can see the trip'),
+			'#weight' => 2,
+	);
+			
+	return $form;
+}
+
+
+/**
+* Implements hook_insert().
+*/
+
+function trips_insert($node, $form_state) {
+	$listpois = array();
+	$listpois = explode(",", $_POST['blah']);
+	$timestampa = date('Y-m-d G:i:s.BO');
+	
+	$idtrip = db_insert('wptsc_trips')
+		->fields(array(
+				'trip_id' => $node->nid,
+				'name' => $node->t_name,
+				'inicio' =>  substr($node->field_dates['und'][0]['value'],0,10),
+				'fin' =>  substr($node->field_dates['und'][0]['value2'],0,10),
+				'public' => $node->t_publico,
+				'count_likes' => 0,
+				'count_dislikes' => 0,
+				'created_on' => $timestampa,
+				'updated_on' => $timestampa,
+		))
+	->execute();
+	
+	
+	foreach($listpois as $th){
+		db_insert('wptsc_trips_resources')
+			->fields(array(
+					'trip_id' => $node->nid,
+					'resource_id' => $th,
+					'daydata' => '-1',
+					'category' => 'C',
+				))
+			->execute();
+	}
+	
+	//drupal_set_message('<pre>'. check_plain(print_r($node, TRUE)) .'</pre>');	
+	watchdog('trip', 'A new trip titled: '.$node->title.' was added by UID: '.$node->uid, $variables = array(),WATCHDOG_NOTICE, $link = 'node/'.$node->nid);
+
+}
+
+
+
+function trips_update($node) {	
+	
+	watchdog('trip', 'A trip titled: '.$node->title.' was updated by UID: '.$node->uid, $variables = array(),WATCHDOG_NOTICE, $link = 'node/'.$node->nid);
+}
+
+
+
+function trips_delete($node) {
+	// log details of the triping to watchdog
+	watchdog('trip', 'A trip titled: '.$node->title.' was deleted by UID: '.$node->uid, $variables = array(),WATCHDOG_NOTICE, $link = 'node/'.$node->nid);
+}
+
+
+
+function trips_view($node, $view_mode) {
+	if ($view_mode == 'full') {
+		
+		$query = db_select('wptsc_trips', 't');
+		$query->join('node', 'n', 'n.nid = t.trip_id');
+		$query->fields('t', array('trip_id','name', 'inicio', 'fin'));
+		$query->condition('n.nid', $node->nid);
+		$result = $query->execute();
+		
+		$fechastc='';
+		foreach ($result as $row) {
+			$fechastc.='<span style="color:#505050">';
+			if(date("Y",strtotime($row->inicio))==date("Y",strtotime($row->fin)))
+				$fechastc.='From '.date("F dS", strtotime($row->inicio));
+			else
+				$fechastc.='From '.date("F dS, Y", strtotime($row->inicio));
+			
+			if(date("YF",strtotime($row->inicio))==date("YF",strtotime($row->fin)))
+				$fechastc.=' to '.date("dS, Y", strtotime($row->fin));
+			else
+				$fechastc.=' to '.date("F dS, Y", strtotime($row->fin));
+			$fechastc.='</span>';
+			
+			$outpart1='';
+			$citiestc='';
+			$maistc='';
+			$cinta=-1;
+			$ryut = db_query('SELECT ri."name", x(p."location"), y(p."location") FROM wptsc_pois AS p, wptsc_trips_resources AS tr, wptsc_resource_infos AS ri WHERE p.resource_ptr_id = tr.resource_id AND ri.resource_id=p.resource_ptr_id AND tr.trip_id='.$row->trip_id);
+			foreach ($ryut as $rw) {
+				$cinta++;
+				$outpart1.=('|'.$rw->x.','.$rw->y);
+				$maistc.='addMarker('.$rw->x.', '.$rw->y.');bounds.extend(new google.maps.LatLng('.$rw->x.', '.$rw->y.'));mapwptsc.fitBounds(bounds);';
+				$maistc.='attachSecretMessage('.$cinta.', "'.$rw->name.'", '.$ryut->rowCount().');';
+				
+				$citiestc.=$rw->name.', ';
+			}
+			$citiestc=substr($citiestc,0,-2);
+			
+			//ver luego
+			$pieces = explode(", ", $citiestc);
+			$resultppp = array_unique($pieces);
+			$citiestc1='';
+			foreach ($resultppp as $rwss) {
+				$citiestc1.=$rwss.', ';
+			}
+			$citiestc1=substr($citiestc1,0,-2);
+			
+			
+			$mapatc='';
+			/*
+			$mapatc.='<img alt="'.$row->name.'" src="http://maps.google.com/maps/api/staticmap?size=650x350&maptype=terrain&sensor=false&markers=size:small';
+			$mapatc.=$outpart1;
+			$mapatc.='&path=color:0x0000ff|weight:5';
+			$mapatc.=$outpart1;
+			$mapatc.='">';
+			*/
+		}
+		
+		
+		$node->content['trip'] = array(
+			'#markup' => theme('trip', array('nodewpt' => $node->nid, 'fechast' => $fechastc, 'mapat' => $mapatc, 'citiest' => $citiestc1, 'maist' => $maistc)),
+			'#weight' => 100,
+		);
+	}
+	return $node;
+}
+
+
+function trips_theme() {
+	return array(
+		'trip' => array(
+			'variables' => array('nodewpt' => NULL, 'fechast' => NULL, 'mapat' => NULL, 'citiest' => NULL, 'maist' => NULL),
+			'template' => 'trip',
+		),
+	);
+}
