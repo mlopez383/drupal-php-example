@@ -21,7 +21,7 @@
 			<div id="branding-wrapper">
 				<?php if ($site_name) : ?>
 					<?php if ($is_front) : ?>
-						<h1 class="site-name"><a href="<?php print $base_path ?>" title="<?php print $site_name ?>"><?php print $site_name ?></a></h1>
+						<h1 class="site-name"><a href="<?php print $base_path ?>" title="<?php print $site_name ?>"><?php print t($site_name) ?></a></h1>
 					<?php endif; ?>
 					<?php if (!$is_front) : ?>
 						<h2 class="site-name"><a href="<?php print $base_path ?>" title="<?php print $site_name ?>"><?php print $site_name ?></a></h2>
@@ -128,6 +128,33 @@
       </div></div> <!-- end sidebar-first -->
     <?php endif; ?>
 <div id="content">
+<?php if ($is_front) : ?>
+						
+					
+        <a href="http://127.0.0.1/ViajeSeguro6/node/add" style="-webkit-box-shadow: 0px 1px 2px 0 rgba(0, 0, 0, 0.4); background-image: -webkit-linear-gradient(#FFF684,#FBC73D);
+background-image: -moz-linear-gradient(#FFF684,#FBC73D);
+background-image: -o-linear-gradient(#FFF684,#FBC73D);
+background-image: linear-gradient(#FFF684,#FBC73D); border: 1px solid #E09A1A; ext-decoration: none;
+-webkit-background-clip: padding-box;
+font-weight: bold;
+border-radius: 3px;margin: 0;
+padding: 0;
+font-size: 100%;
+width: auto;
+overflow: visible; font: 99% sans-serif; -webkit-box-align: center;
+text-align: center;box-sizing: border-box;letter-spacing: normal;
+word-spacing: normal;
+text-transform: none;
+text-indent: 0px;
+text-shadow: none;
+float:right;
+display: inline-block;border-top: 1px solid #FFF9C5;
+color: #4E4E4E;
+text-shadow: 0 1px #FCEB61;font-size: 1.9em;
+padding: 10px 13px;">Planifica tu viaje Ahora!</a>
+<?php endif; ?>
+	  
+	  
 			<a id="main-content"></a>
 			<?php if ($page['content_top']) : ?><div class="content-top"><?php print render ($page['content_top']); ?></div>
 			<?php endif; ?>

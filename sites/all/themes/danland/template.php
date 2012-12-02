@@ -20,7 +20,9 @@ function danland_preprocess_html(&$vars) {
 	//js for plan_trip
 	if (strpos($_SERVER['REQUEST_URI'],'/planning/')) {
 		drupal_add_css('sites/all/modules/plan_trip/plan_trip.css');
-		drupal_add_js('https://maps.google.com/maps/api/js?sensor=false');
+		//drupal_add_js('https://maps.google.com/maps/api/js?sensor=false');
+		drupal_add_js('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false');
+		
 		drupal_add_js('sites/all/modules/plan_trip/plan_trip_googlemaps.js');
 		drupal_add_js('sites/all/modules/plan_trip/infobox.js');
 		

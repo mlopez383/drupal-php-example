@@ -98,7 +98,7 @@
 					jQuery("#idcitywpts"+countcitywpts).live('click', function(){
 						var	vbnvcgv=jQuery(this).text();  //jQuery(this).html();
 						
-						jQuery('#servidraggablewptsc').load('../<?php echo drupal_get_path('module', 'plan_trip'); ?>/list_touristic_resources.php', {cityq2q3: vbnvcgv}, function() {
+						jQuery('#servidraggablewptsc').load('../<?php echo drupal_get_path('module', 'plan_trip'); ?>/list_touristic_resources.php', {cityq2q3: vbnvcgv, fechaini: <?php echo substr($inisx,0,4).substr($inisx,5,2).substr($inisx,8,2);?>, nndia: <?php echo $i;?>}, function() {
 
 							setmarkersonmap();
 							//dragag();
@@ -113,6 +113,10 @@
 			
 		<?php } ?>
 
+		jQuery("#mosdelitos").click(function () {
+				setdelitosonmap();
+		});
+		
 		jQuery("#savewptsc").click(function () {
 
 			dadoshaha = new Array;
@@ -156,9 +160,17 @@
 <div id="contenedorwptsc">
 	<div id="cabecerawptsc">
 		<a href="<?php echo $folderj?>" class="actionButton">Home</a>
-		<div id="savewptsc" style="float: right;">
-			<a href="#" class="actionButton">Save</a>
-		</div>
+	
+		
+		<span id="savewptsc" style="float: right; margin:4px;">
+			<a href="#" class="actionButton"><?php echo t('Guardar'); ?></a>
+		</span>
+		
+			
+		<span id="mosdelitos"  style="float:right; margin:4px;">
+			<a href="#" class="actionButton">Mostrar</a>
+		</span>
+		
 	</div>
 	<div style="clear: both;"></div>
 	
@@ -173,7 +185,7 @@
 			</script>
 			<div id="map_canvas" style="width:300px;height:300px;"></div>
 			
-			CITIES:
+			<?php echo t('Ciudades'); ?>:
 			<div id="poisdraggablewptsc" class="ui-widget-content">
                	<ul class="listsinbullet">
 	               	<?php 
@@ -198,7 +210,7 @@
                	</ul>
            </div>
             
-            <br>PLACES:
+            <br><?php echo t('Lugares'); ?>:
             <div id="servidraggablewptsc" class="ui-widget-content"></div>
             
 		</div>
@@ -206,9 +218,12 @@
 						
 		<div id="menuizqwptsc">
 			
-			<?php for($i=0; $i<$cant_dias; $i++){ ?>
+			<?php for($i=0; $i<$cant_dias; $i++){ 
+					if($i>0){ $date1->add(new DateInterval('P1D')); };
+                    
+				?>
 				<h1 id="daywpf<?php echo $i;?>" class="titledaywportal">
-					<span class="titlewpft">Day <?php echo ($i+1);?></span>
+					<span class="titlewpft"><strong>Dia <?php echo ($i+1); echo '</strong>'; echo '&nbsp;&nbsp;&nbsp;<em>('; echo $date1->format('d/m/Y'); echo ')</em>'; ?></span>
 				</h1>
 			<?php } ?>
 			

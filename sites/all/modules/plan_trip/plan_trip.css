@@ -15,7 +15,7 @@
 #menuizqwptsc {
 	position: absolute;
 	margin: 0px;
-	padding: 10px;
+	padding: 10px 23px 10px 10px;
 	background: white;
 	border: 1px solid #BBB;
 	width: 260px;
@@ -29,9 +29,14 @@
 	overflow-x: hidden;
 }
 
-#cabecerawptsc, #mapawptsc {
+#cabecerawptsc{
 	padding: 1.25em 2%;
 	margin: 0.4em 0;
+}
+
+#mapawptsc {
+	margin-top: 10px;
+	margin-right: 5px;
 }
 
 #cabecerawptsc{ 

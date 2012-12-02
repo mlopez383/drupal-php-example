@@ -4,6 +4,7 @@ var latlngwptsc;
 
 var markerswptsc = [];
 var infoswptsc = [];
+var bounds;
 
 function initialize() {
 	geocoder = new google.maps.Geocoder();
@@ -97,7 +98,7 @@ function setmarkersonmap(){
 	elimarrker();
 	var i=0;
 	var cantloca = 1*document.getElementById("cantlocxy").value;
-	var bounds = new google.maps.LatLngBounds();
+	bounds = new google.maps.LatLngBounds();
 	
 	for (i=1; i<=cantloca; i++)
 	{
@@ -118,6 +119,55 @@ function setmarkersonmap(){
 		helper : 'clone',
 		appendTo : 'body'
 	});
+}
+
+function setdelitosonmap(){
+	var i=0;
+	var cantlocad = 1*document.getElementById("delcantlocxy").value;
+	
+	for (i=1; i<=cantlocad; i++)
+	{
+		xxvxx = eval("document.getElementById('delocx"+i+"').value");
+		yyvyy = eval("document.getElementById('delocy"+i+"').value");
+		nmvnm = eval("document.getElementById('detipo"+i+"').value");
+		
+		
+		var image = '../sites/all/modules/plan_trip/images/abduction.png';
+        if(nmvnm=='ROBO CON ARMA'){
+            ic =asaltoIcon;
+        }else if(nmvnm=='ROBO-HURTO'){
+        	image = "../sites/all/modules/plan_trip/images/theft.png";
+        }else if(nmvnm=='PERSONA DESAPARECIDA'){
+        	image = "../sites/all/modules/plan_trip/images/shooting.png";
+        }else if(nmvnm=='HOMICIDIO'){
+        	image = "../sites/all/modules/plan_trip/images/crimescene.png";
+        }else if(nmvnm=='AGRESIONES-LESIONES'){
+        	image = "../sites/all/modules/plan_trip/images/torture.png";
+        }else if(nmvnm=='VIOLACION'){
+        	image = "../sites/all/modules/plan_trip/images/rape.png";
+        }else if(nmvnm=='HECHO DE TRANSITO'){
+        	image = "../sites/all/modules/plan_trip/images/caraccident.png";
+        }else if(nmvnm=='INCENDIO'){
+        	image = "../sites/all/modules/plan_trip/images/fire.png";
+        }else if(nmvnm=='VENTA O TRAFICO DE DROGAS'){
+            image = "../sites/all/modules/plan_trip/images/narcotics.png";
+        }
+		
+		
+		markerswptsc.push(new google.maps.Marker({
+		      position: new google.maps.LatLng(xxvxx, yyvyy),
+		      map: mapwptsc,
+  	          icon: image,
+  	          title:nmvnm
+		    }));
+		
+						
+		bounds.extend(new google.maps.LatLng(xxvxx, yyvyy));
+		mapwptsc.fitBounds(bounds);
+				
+		//attachSecretMessage(i-1, ddvdd, nmvnm, cantloca);
+	}
+	
 }
 
 
